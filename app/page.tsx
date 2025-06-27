@@ -8,8 +8,9 @@ import { TagsSection } from "@/components/tags-section"
 import { Button } from "@/components/ui/button"
 import type { BlogPost } from "@/lib/types"
 import { tutorials, Tutorial } from "@/lib/random-blogs"
-import { Loader2, Rss, Mail, Twitter, X, Linkedin,  } from "lucide-react"
+import { Loader2, Rss } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import './globals.css'
 
 export default function HomePage() {
@@ -18,7 +19,6 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set())
 
-  // Type guard to distinguish BlogPost from Tutorial
   const isBlogPost = (blog: BlogPost | Tutorial): blog is BlogPost => {
     return "content" in blog
   }
@@ -47,13 +47,11 @@ export default function HomePage() {
     fetchBlogs()
   }, [])
 
-  // Combine blogs and tutorials, then sort by createdAt (newest first)
   const combinedBlogs = useMemo(() => {
     const allBlogs = [...blogs, ...tutorials]
     return allBlogs.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
   }, [blogs])
 
-  // Filter blogs based on search query and selected tags
   const filteredBlogs = useMemo(() => {
     return combinedBlogs.filter((blog) => {
       const matchesSearch =
@@ -106,7 +104,6 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-neutralbg-3">
-      {/* Hero Header */}
       <div className="bg-gradient-to-br from-coral-1 via-coral-2 to-coral-3 border-b border-coral-4/20">
         <div className="max-w-6xl mx-auto px-4 py-20">
           <div className="text-center max-w-4xl mx-auto">
@@ -118,45 +115,47 @@ export default function HomePage() {
             </p>
 
             <div className="flex items-center justify-center gap-4 animate-slide-up">
-                <Button
+              <Button
                 variant="outline"
                 size="sm"
                 className="hover:bg-coral-2 hover:border-coral-5 hover:text-coral-7 transition-all duration-300 hover:scale-105 active:scale-95 bg-white/80 backdrop-blur-sm border-coral-4"
                 asChild
-                >
+              >
                 <a href="https://linkedin.com/in/yashkathoke" target="_blank" rel="noopener noreferrer">
-                  <img 
-                  src="https://img.icons8.com/?size=100&id=13930&format=png&color=000000" 
-                  alt="LinkedIn" 
-                  className="w-4 h-4 mr-2 inline"
+                  <Image
+                    src="https://img.icons8.com/?size=100&id=13930&format=png&color=000000"
+                    alt="LinkedIn"
+                    width={16}
+                    height={16}
+                    className="w-4 h-4 mr-2 inline"
                   />
                   LinkedIn
                 </a>
-                </Button>
-                <Button
+              </Button>
+              <Button
                 variant="outline"
                 size="sm"
                 className="hover:bg-coral-2 hover:border-coral-5 hover:text-coral-7 transition-all duration-300 hover:scale-105 active:scale-95 bg-white/80 backdrop-blur-sm border-coral-4"
                 asChild
-                >
+              >
                 <a href="https://x.com/kathokeyash05" target="_blank" rel="noopener noreferrer">
-                                    <img 
-                  src="https://img.icons8.com/?size=100&id=phOKFKYpe00C&format=png&color=000000" 
-                  alt="LinkedIn" 
-                  className="w-4 h-4 mr-2 inline"
+                  <Image
+                    src="https://img.icons8.com/?size=100&id=phOKFKYpe00C&format=png&color=000000"
+                    alt="X"
+                    width={16}
+                    height={16}
+                    className="w-4 h-4 mr-2 inline"
                   />
                   X
                 </a>
-                </Button>
+              </Button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Search Section */}
       <SearchSection searchQuery={searchQuery} onSearchChange={setSearchQuery} />
 
-      {/* Tags Section */}
       <TagsSection
         availableTags={availableTags}
         selectedTags={selectedTags}
@@ -164,7 +163,6 @@ export default function HomePage() {
         onClearAll={handleClearAll}
       />
 
-      {/* Blog Grid Section */}
       <div className="max-w-6xl mx-auto px-4 py-12">
         {filteredBlogs.length === 0 ? (
           <div className="text-center py-16">
@@ -211,7 +209,6 @@ export default function HomePage() {
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className="w-full">
-                    {/* Use BlogCard for BlogPost, BlogCardCustom for Tutorial */}
                     {isBlogPost(blog) ? (
                       <BlogCard blog={blog} />
                     ) : (
@@ -225,42 +222,39 @@ export default function HomePage() {
         )}
       </div>
 
-            <footer className="bg-neutralbg-2 border-t border-coral-3/20 mt-20 py-12">
-  <div className="max-w-6xl mx-auto px-4">
-    <div className="flex flex-col items-center justify-center gap-6">
-      <div className="flex items-center gap-4">
-        <div className="h-px bg-gradient-to-r from-coral-3 to-coral-5 w-12"></div>
-        <span className="font-serif-display text-neutralbg-11 text-xl">Tutorial Hub</span>
-        <div className="h-px bg-gradient-to-r from-coral-5 to-coral-3 w-12"></div>
-      </div>
+      <footer className="bg-neutralbg-2 border-t border-coral-3/20 mt-20 py-12">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex flex-col items-center justify-center gap-6">
+            <div className="flex items-center gap-4">
+              <div className="h-px bg-gradient-to-r from-coral-3 to-coral-5 w-12"></div>
+              <span className="font-serif-display text-neutralbg-11 text-xl">Tutorial Hub</span>
+              <div className="h-px bg-gradient-to-r from-coral-5 to-coral-3 w-12"></div>
+            </div>
 
-      <div className="flex flex-wrap justify-center gap-6 text-sm text-neutralbg-9">
-        <Link href="/policy/terms" className="hover:text-coral-6 transition-colors">
-          <div>Terms</div>
-        </Link>
-        <Link href="/policy/refund" className="hover:text-coral-6 transition-colors">
-          <div>Refund</div>
-        </Link>
-        <Link href="/policy/shipping" className="hover:text-coral-6 transition-colors">
-          <div>Shipping</div>
-        </Link>
-        <Link href="/policy/privacy" className="hover:text-coral-6 transition-colors">
-          <div>Privacy</div>
-        </Link>
-        <Link href="/policy/contact" className="hover:text-coral-6 transition-colors">
-          <div>Contact</div>
-        </Link>
-      </div>
+            <div className="flex flex-wrap justify-center gap-6 text-sm text-neutralbg-9">
+              <Link href="/policy/terms" className="hover:text-coral-6 transition-colors">
+                <div>Terms</div>
+              </Link>
+              <Link href="/policy/refund" className="hover:text-coral-6 transition-colors">
+                <div>Refund</div>
+              </Link>
+              <Link href="/policy/shipping" className="hover:text-coral-6 transition-colors">
+                <div>Shipping</div>
+              </Link>
+              <Link href="/policy/privacy" className="hover:text-coral-6 transition-colors">
+                <div>Privacy</div>
+              </Link>
+              <Link href="/policy/contact" className="hover:text-coral-6 transition-colors">
+                <div>Contact</div>
+              </Link>
+            </div>
 
-      <p className="text-neutralbg-8 text-sm">
-        &copy; {new Date().getFullYear()} Tutorial Hub. All rights reserved.
-      </p>
+            <p className="text-neutralbg-8 text-sm">
+              &copy; {new Date().getFullYear()} Tutorial Hub. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
-  </div>
-</footer>
-
-    </div>
-
-    
   )
 }
