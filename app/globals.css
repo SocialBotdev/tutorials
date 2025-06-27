@@ -1,26 +1,186 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  /* Color System */
+  --color-coral-1: #fef7f0;
+  --color-coral-2: #fde8d7;
+  --color-coral-3: #ffb588;
+  --color-coral-4: #ffa771;
+  --color-coral-5: #ff914d;
+  --color-coral-6: #f4803d;
+  --color-coral-7: #b56737;
+  --color-coral-8: #8b4513;
+  --color-coral-9: #6b3d20;
+
+  --color-neutralbg-1: #ffffff;
+  --color-neutralbg-3: #f6f6f6;
+  --color-neutralbg-5: #ddddde;
+  --color-neutralbg-11: #37363d;
+
+  --color-accent-300: #fff4e6;
+  --color-accent-500: #ffe4cc;
+  --color-accent-700: #cc7a3d;
+
+  /* Font System */
+  --font-serif-display: "DM Serif Display", serif;
+  --font-sans: "Inter", sans-serif;
+
+  /* Font Sizes */
+  --size-h1-mobile: 45px;
+  --size-h2-mobile: 35px;
+  --size-h3-mobile: 25px;
+  --size-h4-mobile: 18px;
+  --size-body-mobile: 16px;
+  --size-h1-desktop: 65px;
+  --size-h2-desktop: 55px;
+  --size-h3-desktop: 45px;
+  --size-h4-desktop: 35px;
+  --size-body-desktop: 26px;
+
+  /* Border Radius */
+  --radius: 0.5rem;
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+/* Keyframes */
+@keyframes accordion-down {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slide-up {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Theme Variables */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 222.2 84% 4.9%;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans);
+  }
+
+  h1 {
+    font-family: var(--font-serif-display);
+    font-size: var(--size-h1-mobile);
+    line-height: 1.1;
+  }
+  
+  h2 {
+    font-family: var(--font-serif-display);
+    font-size: var(--size-h2-mobile);
+    line-height: 1.2;
+  }
+  
+  h3 {
+    font-family: var(--font-serif-display);
+    font-size: var(--size-h3-mobile);
+    line-height: 1.3;
+  }
+  
+  h4 {
+    font-family: var(--font-serif-display);
+    font-size: var(--size-h4-mobile);
+    line-height: 1.4;
+  }
+  
+  p, .body-text {
+    font-size: var(--size-body-mobile);
+    line-height: 1.6;
+  }
+
+  @media (min-width: 768px) {
+    h1 { font-size: var(--size-h1-desktop); }
+    h2 { font-size: var(--size-h2-desktop); }
+    h3 { font-size: var(--size-h3-desktop); }
+    h4 { font-size: var(--size-h4-desktop); }
+    p, .body-text { font-size: var(--size-body-desktop); }
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  /* Font Families */
+  .font-serif-display { font-family: var(--font-serif-display); }
+  .font-sans { font-family: var(--font-sans); }
+
+  /* Border Radius */
+  .rounded-lg { border-radius: var(--radius-lg); }
+  .rounded-md { border-radius: var(--radius-md); }
+  .rounded-sm { border-radius: var(--radius-sm); }
+
+  /* Animations */
+  .animate-accordion-down { animation: accordion-down 0.2s ease-out; }
+  .animate-accordion-up { animation: accordion-up 0.2s ease-out; }
+  .animate-fade-in { animation: fade-in 0.3s ease-out; }
+  .animate-slide-up { animation: slide-up 0.3s ease-out; }
 }
