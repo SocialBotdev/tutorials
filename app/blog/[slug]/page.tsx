@@ -10,56 +10,27 @@ import { formatDate } from "@/lib/utils"
 import { ArrowLeft, ExternalLink, Twitter, Linkedin, Calendar, Clock, Share2, BookOpen } from "lucide-react"
 
 interface BlogDetailPageProps {
-  params: {
-    slug: string
-  }
+  params: Promise<{ slug: string }>
 }
 
 async function getBlog(slug: string): Promise<BlogPost | null> {
   try {
-    // In a real app, this would fetch from your database
-    const mockBlog: BlogPost = {
-      _id: "1",
-      title: "The Future of AI in Web Development",
-      description:
-        "Exploring how artificial intelligence is revolutionizing the way we build and design websites, from automated code generation to intelligent user experiences.",
-      slug: slug,
-      image: "/placeholder.svg?height=400&width=800",
-      tags: ["AI", "Web Development", "Technology", "Future"],
-      content: [
-        {
-          title: "OpenAI GPT-4 Documentation",
-          description:
-            "Comprehensive guide to using GPT-4 for various applications including code generation and content creation.",
-          url: "https://openai.com/gpt-4",
-        },
-        {
-          title: "GitHub Copilot",
-          description: "AI-powered code completion tool that helps developers write code faster and with fewer errors.",
-          url: "https://github.com/features/copilot",
-        },
-        {
-          title: "Vercel AI SDK",
-          description:
-            "Open-source library for building AI-powered applications with React, Next.js, and other frameworks.",
-          url: "https://sdk.vercel.ai",
-        },
-      ],
-      createdAt: new Date("2024-01-15"),
-      updatedAt: new Date("2024-01-15"),
-    }
-
-    return mockBlog
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/list-blog/${slug}`);
+    if (!response.ok) return null;
+    return await response.json();
   } catch (error) {
-    return null
+    console.error("Error fetching blog:", error);
+    return null;
   }
 }
 
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
-  const blog = await getBlog(params.slug)
+  // Await the params to resolve the slug
+  const { slug } = await params;
+  const blog = await getBlog(slug);
 
   if (!blog) {
-    notFound()
+    notFound();
   }
 
   const shareUrl = `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/blog/${blog.slug}`
