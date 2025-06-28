@@ -43,8 +43,9 @@ export default function AdminPage() {
         setValidationErrors(result.error.errors.map((err) => `${err.path.join(".")}: ${err.message}`))
         return false
       }
-    } catch (error) {
+    } catch (e) {
       setValidationErrors(["Invalid JSON format"])
+      console.error(e)
       return false
     }
   }

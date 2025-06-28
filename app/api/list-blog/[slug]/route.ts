@@ -1,3 +1,4 @@
+import { BlogPost } from "@/lib/types"
 import { type NextRequest, NextResponse } from "next/server"
 
 // Mock database - same as in the main route
